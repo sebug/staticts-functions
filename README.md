@@ -12,3 +12,7 @@ Again with a storage container
 	az storage container create --name statictscontent
 	az storage container set-permission --name statictscontent --public-access blob
 
+
+The website can be reached under http://staticts.azurewebsites.net
+
+
