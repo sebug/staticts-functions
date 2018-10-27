@@ -6,4 +6,9 @@ We're using the usual contortions of the last few projects, but this time around
 	az group create --name staticTS --location westeurope
 	az storage account create --name staticts --location westeurope --resource-group staticTS --sku Standard_LRS
 	az functionapp create --name StaticTS --storage-account staticts --resource-group staticTS --consumption-plan-location westeurope
-	
+
+Again with a storage container
+
+	az storage container create --name statictscontent
+	az storage container set-permission --name statictscontent --public-access blob
+
