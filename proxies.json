@@ -17,6 +17,15 @@
 		"route": "/build.js"
 	    },
 	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/build.js"
+	},
+	"polyfill": {
+	    "matchCondition": {
+		"methods": [
+		    "GET"
+		],
+		"route": "/polyfill.min.js"
+	    },
+	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/polyfill.min.js"
 	}
     }
 }
