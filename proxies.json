@@ -26,6 +26,24 @@
 		"route": "/polyfill.min.js"
 	    },
 	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/polyfill.min.js"
+	},
+	"specrunnerhtml": {
+	    "matchCondition": {
+		"methods": [
+		    "GET"
+		],
+		"route": "/_specRunner.html"
+	    },
+	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/_specRunner.html"
+	},
+	"specrunnerjs": {
+	    "matchCondition": {
+		"methods": [
+		    "GET"
+		],
+		"route": "/specRoot.js"
+	    },
+	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/specRoot.js"
 	}
     }
 }
