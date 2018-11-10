@@ -1,16 +1,20 @@
 const azure = require('azure-storage');
 
 function storeLines(lines, context) {
-    context.log('Got ' + lines.length + ' lines!');
-    context.log(JSON.stringify(lines[0]));
+    return new Promise((resolve, reject) => {
+	context.log('Got ' + lines.length + ' lines!');
+	context.log(JSON.stringify(lines[0]));
+	resolve(true);
+    });
 }
 
-module.exports = function (context, req) {
+module.exports = async function (context, req) {
     context.log('Uploading file...');
     if (!req.body || !req.body.length) {
 	context.log('Did not receive a body');
     } else {
-	storeLines(req.body, context);
+	const storeResult = await storeLines(req.body, context);
+	context.log('Store result is ' + storeResult);
     }
     context.res = {
 	body: 'Uploaded',
