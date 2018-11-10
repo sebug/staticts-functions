@@ -20,3 +20,4 @@ We'll also need some tables to store the lines
 
 	az storage table create --name timesheetLines
 
+I had to ensure runtime version was 2 to use async/await.
