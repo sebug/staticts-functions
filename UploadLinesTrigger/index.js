@@ -40,7 +40,7 @@ async function storeLines(lines, context) {
 
     for (let entity of entities) {
 	const importResult = await storeEntity(tableService, entity);
-	context.log('Saved ' + importResult.RowKey._);
+	context.log('Saved ' + entity.RowKey._);
     }
     
     return true;
