@@ -8,23 +8,20 @@ function storeLines(lines, context) {
     });
 }
 
-module.exports = function (context, req) {
+module.exports = async function (context, req) {
     context.log('Uploading file...');
     if (!req.body || !req.body.length) {
 	context.log('Did not receive a body');
-	context.res = {
+	return {
 	    body: 'Nothing received',
 	    status: 200
 	};
-	context.done();
     } else {
-	storeLines(req.body, context).then(storeResult => {
-	    context.log('Store result is ' + storeResult);
-	    context.res = {
-		body: 'Upload complete',
-		status: 200
-	    };
-	    context.done();
-	});
+	const storeResult = await storeLines(req.body, context);
+	context.log('Store result is ' + storeResult);
+	return {
+	    body: 'Upload complete',
+	    status: 200
+	};
     }
 };
