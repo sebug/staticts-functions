@@ -6,6 +6,9 @@ module.exports = function (context, req) {
     } else {
 	context.log('Got ' + req.body.length + ' lines');
 	context.log(JSON.stringify(req.body[0]));
+	context.log('trying to get a date');
+	let d = new Date(req.body[0].startDate);
+	context.log(d);
     }
     context.res = {
 	body: 'Uploaded',
