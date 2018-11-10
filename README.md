@@ -16,3 +16,7 @@ Again with a storage container
 The website can be reached under http://staticts.azurewebsites.net
 
 
+We'll also need some tables to store the lines
+
+	az storage table create --name timesheetLines
+
