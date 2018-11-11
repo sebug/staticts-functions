@@ -171,6 +171,19 @@ async function calculateSummary(context) {
 		    } else {
 			context.log('not found task with number "' + estimationLine.NavTaskNumber + '" for job ' + followUpLine.NavJobNumber);
 		    }
+
+		    // also, try to find out the project name if at all possible
+		    const otherTimesheetLineOfSameJob = timesheetLines.filter(tl => {
+			const jobNumber = tl.JobNumber.replace('JOB','')
+			      .replace(/^0+/,'');
+			if (jobNumber === estimationLine.NavJobNumber) {
+			    return tl.JobName;
+			}
+			return false;
+		    })[0];
+		    if (otherTimesheetLineOfSameJob) {
+			followUpLine.Project = otherTimesheetLineOfSameJob.JobName;
+		    }
 		}
 	    }
 
