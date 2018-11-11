@@ -229,7 +229,7 @@ async function calculateSummary(context) {
 	      .replace(/^0+/,'');
 	const correspondingFollowUpLine = result.FollowUpLines.filter(fu => fu.NavTaskNumber === tl.TaskNumber && fu.NavJobNumber === jobNumber)[0];
 	if (correspondingFollowUpLine) {
-	    const correspondingBucket = dateBuckets.filter(db => tl.StartDate >= db.From && tl.StartDate <= db.To)[0];
+	    const correspondingBucket = dateBuckets.filter(db => new Date(tl.StartDate) >= db.From && new Date(tl.StartDate) <= db.To)[0];
 	    const correspondingBucketString = formatBucketString(correspondingBucket);
 	    if (isFirst) {
 		isFirst = false;
