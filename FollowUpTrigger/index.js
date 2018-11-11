@@ -164,6 +164,7 @@ async function calculateSummary(context) {
 		    // try to find it in the jobs
 		    const jobTaskLines = await getTaskLines(context, tableService, null, [], '' + followUpLine.NavJobNumber);
 		    context.log('found ' + jobTaskLines.length + ' tasks for ' + followUpLine.NavJobNumber);
+		    context.log('now searching for task with number ' + estimationLine.NavTaskNumber);
 		    const task = jobTaskLines.filter(tl => {
 			return tl.RowKey === '' + estimationLine.NavTaskNumber;
 		    })[0];
