@@ -163,13 +163,13 @@ async function calculateSummary(context) {
 		} else {
 		    // try to find it in the jobs
 		    const jobTaskLines = await getTaskLines(context, tableService, null, [], '' + followUpLine.NavJobNumber);
-		    context.log('found ' + jobTaskLines.length + ' tasks for ' + followUpLine.NavJobNumber);
-		    context.log('now searching for task with number ' + estimationLine.NavTaskNumber);
 		    const task = jobTaskLines.filter(tl => {
 			return tl.RowKey === '' + estimationLine.NavTaskNumber;
 		    })[0];
 		    if (task) {
 			followUpLine.Task = task.Description;
+		    } else {
+			context.log('not found task with number "' + estimationLine.NavTaskNumber + '" for job ' + followUpLine.NavJobNumber);
 		    }
 		}
 	    }
