@@ -224,7 +224,7 @@ async function calculateSummary(context) {
     for (let tl of rangeTimesheetLines) {
 	const jobNumber = tl.JobNumber.replace('JOB','')
 	      .replace(/^0+/,'');
-	const correspondingFollowUpLine = result.FollowUpLines.filter(fu => fu.NavTaskNumber === tl.JobTaskNumber && fu.NavJobNumber === jobNumber)[0];
+	const correspondingFollowUpLine = result.FollowUpLines.filter(fu => fu.NavTaskNumber === tl.TaskNumber && fu.NavJobNumber === jobNumber)[0];
 	if (correspondingFollowUpLine) {
 	    const correspondingBucket = dateBuckets.filter(db => tl.StartingDate >= db.From && tl.StartingDate <= db.To)[0];
 	    const correspondingBucketString = formatBucketString(correspondingBucket);
