@@ -218,6 +218,23 @@ async function calculateSummary(context) {
 
     context.log(JSON.stringify(dateBucketStrings));
 
+    const hoursPerDay = 8; // No environment variable for this :-)
+
+    let isFirst = true;
+    for (let tl of rangeTimesheetLines) {
+	const jobNumber = tl.JobNumber.replace('JOB','')
+	      .replace(/^0+/,'');
+	const correspondingFollowUpLine = result.FollowUpLines.filter(fu => fu.NavTaskNumber === tl.JobTaskNumber && fu.NavJobNumber === jobNumber)[0];
+	if (correspondingFollowUpLine) {
+	    const correspondingBucket = dateBuckets.filter(db => tl.StartingDate >= db.From && tl.StartingDate <= db.To)[0];
+	    const correspondingBucketString = formatBucketString(correspondingBucket);
+	    if (isFirst) {
+		isFirst = false;
+		context.log('Corresponding bucket string is ' + correspondingBucketString);
+	    }
+	}
+    }
+
     return result;
 }
 
