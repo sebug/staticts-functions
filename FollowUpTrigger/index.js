@@ -72,7 +72,50 @@ async function calculateSummary(context) {
     context.log('Got ' + timesheetLines.length + ' timesheet lines');
     context.log('the first task is ');
     context.log(JSON.stringify(tasks[0]));
-    return estimation;
+    let result = {};
+    result.Name = estimation.Name;
+    result.TimePeriodTitle = estimation.TimePeriodTitle;
+
+    result.FollowUpLines = [];
+
+    if (estimation.EstimationLines) {
+	for (let estimationLine of estimation.EstimationLines) {
+	    let followUpLine = {};
+	    followUpLine.State = estimationLine.State;
+	    followUpLine.NavJobNumber = estimationLine.NavJobNumber;
+            followUpLine.NavTaskNumber = estimationLine.NavTaskNumber;
+            followUpLine.TfsNumber = estimationLine.TfsNumber;
+            followUpLine.BaseLine = estimationLine.Baseline;
+
+	    let correspondingJobTaskLine = null;
+	    if (timesheetLines) {
+		correspondingJobTaskLine = timesheetLines.filter(tl => {
+		    const jobNumber = tl.JobNumber.replace('JOB','')
+			  .replace(/^0+/,'');
+		    if (jobNumber === estimationLine.NavJobNumber) {
+			return tl.TaskNumber === estimationLine.NavTaskNumber;
+		    }
+		    return false;
+		})[0];
+		if (correspondingJobTaskLine) {
+		    followUpLine.Project = correspondingJobTaskLine.JobName;
+                    followUpLine.Task = correspondingJobTaskLine.TaskDescription;
+		} else {
+		    // try to find it in the jobs
+		    const jobTaskLines = await getTaskLines(context, tableService, null, [], followUpLine.NavJobNumber);
+		    const task = jobTaskLines.filter(tl => {
+			return tl.RowKey === estimationLine.NavTaskNumber;
+		    })[0];
+		    if (task) {
+			followUpLine.Task = task.Description;
+		    }
+		}
+	    }
+
+	    result.FollowUpLines.push(followUpLine);
+	}
+    }
+    return result;
 }
 
 module.exports = async function (context, req) {
