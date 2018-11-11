@@ -158,10 +158,21 @@ async function calculateSummary(context) {
 
     let timesheetLinesGroupedByJobAndTask = groupTimesheetLinesByJobAndTask(rangeTimesheetLines);
 
-    context.log('We have ' + timesheetLinesGroupedByJobAndTask.length + ' groups');
-
-    context.log('First is ' + timesheetLinesGroupedByJobAndTask[0].JobNumber +
-		' - ' + timesheetLinesGroupedByJobAndTask[0].TaskNumber);
+    for (let tg of timesheetLinesGroupedByJobAndTask) {
+	if (!result.FollowUpLines.filter(fu => {
+	    return fu.NavJobNumber === tg.JobNumber && fu.NavTaskNumber === tg.TaskNumber;
+	})[0]) {
+	    const followUpLine= {
+		State: 'Open',
+		NavJobNumber: tg.JobNumber,
+		NavTasknumber: tg.TaskNumber,
+		Project: tg.Lines[0].JobDescription,
+		Task: tg.Lines[0].TaskDescription
+	    };
+	    context.log('Added ' + JSON.stringify(followUpLine));
+	    result.FollowUpLines.push(followUpLine);
+	}
+    }
 
     return result;
 }
