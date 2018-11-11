@@ -122,13 +122,19 @@ async function calculateSummary(context) {
     if (process.env.BUCKET_START_DAY) {
 	bucketStartDay = Number(process.env.BUCKET_START_DAY);
     }
-    context.log('Starting day is ' + bucketStartDay);
     while (startingDate.getDay() !== bucketStartDay) {
 	let d = new Date(startingDate.valueOf());
 	d.setDate(d.getDate() - 1);
 	startingDate = d;
     }
     context.log('Starting date is ' + startingDate);
+
+    const rangeTimesheetLines = timesheetLines.filter(tl => {
+	const startDateMatches = new Date(tl.StartDate).valueOf() >= startingDate.valueOf();
+	return startDateMatches; // TODO: allow for yearly summaries by also defining end date
+    });
+
+    context.log('we have ' + rangeTimesheetLines.length + ' timesheet lines');
 
     return result;
 }
