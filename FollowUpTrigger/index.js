@@ -192,8 +192,29 @@ async function calculateSummary(context) {
 
     const dateBuckets = Array.from(getDateBuckets(startingDate));
 
-    context.log('We got ' + dateBuckets.length + ' date buckets');
-    context.log('First is ' + JSON.stringify(dateBuckets[0]));
+    const dateBucketStrings = dateBuckets.map(db => {
+	let startDate = '' + db.From.getDate();
+	if (startDate.length === 1) {
+	    startDate = '0' + startDate;
+	}
+	let startMonth = '' + (db.From.getMonth() + 1);
+	if (startMonth.length === 1) {
+	    startMonth = '0' + startMonth;
+	}
+	let endDate = '' + db.To.getDate();
+	if (endDate.length === 1) {
+	    endDate = '0' + endDate;
+	}
+	let endMonth = '' + (db.To.getMonth() + 1);
+	if (endMonth.length === 1) {
+	    endMonth = '0' + endMonth;
+	}
+	return startDate + '.' + startMonth +
+	    ' - ' +
+	    endDate + '.' + endMonth;
+    });
+
+    context.log(JSON.stringify(dateBucketStrings));
 
     return result;
 }
