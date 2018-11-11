@@ -102,6 +102,9 @@ function* getDateBuckets(startDate) {
 }
 
 function formatBucketString(db) {
+    if (!db) {
+	return '';
+    }
     let startDate = '' + db.From.getDate();
     if (startDate.length === 1) {
 	startDate = '0' + startDate;
@@ -226,7 +229,7 @@ async function calculateSummary(context) {
 	      .replace(/^0+/,'');
 	const correspondingFollowUpLine = result.FollowUpLines.filter(fu => fu.NavTaskNumber === tl.TaskNumber && fu.NavJobNumber === jobNumber)[0];
 	if (correspondingFollowUpLine) {
-	    const correspondingBucket = dateBuckets.filter(db => tl.StartingDate >= db.From && tl.StartingDate <= db.To)[0];
+	    const correspondingBucket = dateBuckets.filter(db => tl.StartDate >= db.From && tl.StartDate <= db.To)[0];
 	    const correspondingBucketString = formatBucketString(correspondingBucket);
 	    if (isFirst) {
 		isFirst = false;
