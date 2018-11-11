@@ -63,6 +63,22 @@ function getEstimation(context) {
     });
 }
 
+function groupTimesheetLinesByJobAndTask(timesheetLines) {
+    timesheetLines = timesheetLines || [];
+    let groups = {};
+    for (let tl of timesheetLines) {
+	const jobNumber = tl.JobNumber.replace('JOB','')
+	      .replace(/^0+/,'');
+	const taskNumber = tl.TaskNumber;
+	const key = jobNumber + '_' + taskNumber;
+	if (!groups[key]) {
+	    groups[key] = [];
+	}
+	groups[key].push(tl);
+    }
+    return groups;
+}
+
 async function calculateSummary(context) {
     const tableService = azure.createTableService();
     
@@ -134,7 +150,9 @@ async function calculateSummary(context) {
 	return startDateMatches; // TODO: allow for yearly summaries by also defining end date
     });
 
-    context.log('we have ' + rangeTimesheetLines.length + ' timesheet lines');
+    let groups = groupTimesheetLinesByJobAndTask(rangeTimesheetLines);
+
+    context.log('We have ' + Object.keys(groups).length + ' groups');
 
     return result;
 }
