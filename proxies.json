@@ -44,6 +44,24 @@
 		"route": "/specRoot.js"
 	    },
 	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/specRoot.js"
+	},
+	"followuphtml": {
+	    "matchCondition": {
+		"methods": [
+		    "GET"
+		],
+		"route": "/followup.html"
+	    },
+	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/followup.html"
+	},
+	"followupjs": {
+	    "matchCondition": {
+		"methods": [
+		    "GET"
+		],
+		"route": "/followup.js"
+	    },
+	    "backendUri": "https://staticts.blob.core.windows.net/statictscontent/followup.js"
 	}
     }
 }
