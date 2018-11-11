@@ -86,16 +86,18 @@ function groupTimesheetLinesByJobAndTask(timesheetLines) {
 }
 
 function* getDateBuckets(startDate) {
-    while (startDate <= new Date().valueOf()) {
-	let toDate = new Date(startDate.valueOf());
+    let sd = new Date(startDate.valueOf());
+    while (sd <= new Date().valueOf()) {
+	let toDate = new Date(sd.valueOf());
 	toDate.setDate(toDate.getDate() + 6);
 	const dateBucket = {
-	    From: startDate,
+	    From: sd,
 	    To: toDate
 	};
 	yield dateBucket;
 
-	startDate.setDate(startDate.getDate() + 7);
+	sd = new Date(sd.valueOf());
+	sd.setDate(sd.getDate() + 7);
     }
 }
 
