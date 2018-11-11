@@ -167,7 +167,7 @@ async function calculateSummary(context) {
 			return tl.RowKey === '' + estimationLine.NavTaskNumber;
 		    })[0];
 		    if (task) {
-			followUpLine.Task = task.Description;
+			followUpLine.Task = task.TaskDescription;
 		    } else {
 			context.log('not found task with number "' + estimationLine.NavTaskNumber + '" for job ' + followUpLine.NavJobNumber);
 		    }
