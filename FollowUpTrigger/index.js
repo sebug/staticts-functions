@@ -219,7 +219,7 @@ async function calculateSummary(context) {
 
     const dateBucketStrings = dateBuckets.map(formatBucketString);
 
-    context.log(JSON.stringify(dateBucketStrings));
+    result.DateBuckets = dateBucketStrings;
 
     const hoursPerDay = 8; // No environment variable for this :-)
 
@@ -235,8 +235,32 @@ async function calculateSummary(context) {
 		isFirst = false;
 		context.log('Corresponding bucket string is ' + correspondingBucketString);
 	    }
+
+	    if (!correspondingFollowUpLine.TimeSpent) {
+		correspondingFollowUpLine.TimeSpent = {};
+	    }
+
+	    if (!correspondingFollowUpLine.TimeSpent[correspondingBucketString]) {
+		correspondingFollowUpLine.TimeSpent[correspondingBucketString] = 0;
+	    }
+
+	    if (tl.QuantityWorked) {
+		correspondingFollowUpLine.TimeSpent[correspondingBucketString] += tl.QuantityWorked / hoursPerDay;
+	    }
 	} else {
 	    context.log('No follow-up line found for ' + JSON.stringify(tl));
+	}
+
+	for (let fu of result.FollowUpLines) {
+	    if (fu.TimeSpent) {
+		let sum = 0;
+		for (let k in fu.TimeSpent) {
+		    if (typeof fu.TimeSpent[k] === 'number') {
+			sum += fu.TimeSpent[k] || 0;
+		    }
+		}
+		fu.TotalTimeSpent = sum;
+	    }
 	}
     }
 
