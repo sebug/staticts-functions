@@ -12,19 +12,27 @@ function objectifyEntity(tle) {
 }
 
 function getTimesheetLines(context, tableService, continuationToken, loadedResults) {
+    return getTableEntities(context, tableService, continuationToken, loadedResults, 'timesheetLines', 'prod');
+}
+
+function getTaskLines(context, tableService, continuationToken, loadedResults, jobNumber) {
+    return getTableEntities(context, tableService, continuationToken, loadedResults, 'timesheetLines', jobNumber);
+}
+
+function getTableEntities(context, tableService, continuationToken, loadedResults, tableName, partitionName) {
     if (!loadedResults) {
 	loadedResults = [];
     }
     return new Promise((resolve, reject) => {
 	const query = new azure.TableQuery()
-	      .where('PartitionKey eq ?', 'prod');
-	tableService.queryEntities('timesheetLines', query, continuationToken, (error, result, response) => {
+	      .where('PartitionKey eq ?', partitionName);
+	tableService.queryEntities(tableName, query, continuationToken, (error, result, response) => {
 	    if (error) {
 		reject(error);
 	    } else {
 		const lines = loadedResults.concat(result.entries.map(objectifyEntity));
 		if (result.continuationToken) {
-		    getTimesheetLines(context, tableService, result.continuationToken, lines).then(allLines => {
+		    getTableEntities(context, tableService, result.continuationToken, lines, tableName, partitionName).then(allLines => {
 			resolve(allLines);
 		    });
 		} else {
@@ -60,17 +68,16 @@ async function calculateSummary(context) {
     
     const estimation = await getEstimation(context);
     const timesheetLines = await getTimesheetLines(context, tableService, null, []);
+    const tasks = await getTaskLines(context, tableService, null, [], '592');
     context.log('Got ' + timesheetLines.length + ' timesheet lines');
-    context.log('the first is ');
-    context.log(JSON.stringify(timesheetLines[0]));
+    context.log('the first task is ');
+    context.log(JSON.stringify(tasks[0]));
     return estimation;
 }
 
 module.exports = async function (context, req) {
     context.log('Calculating summary');
     const summary = await calculateSummary(context);
-    context.log('Summary result is ' + JSON.stringify(summary));
-    context.log('Gist url is ' + process.env.GIST_URL);
     return {
         body: summary,
         status: 200
