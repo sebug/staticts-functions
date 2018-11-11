@@ -16,7 +16,7 @@ function getTimesheetLines(context, tableService, continuationToken, loadedResul
 }
 
 function getTaskLines(context, tableService, continuationToken, loadedResults, jobNumber) {
-    return getTableEntities(context, tableService, continuationToken, loadedResults, 'timesheetLines', jobNumber);
+    return getTableEntities(context, tableService, continuationToken, loadedResults, 'tasks', jobNumber);
 }
 
 function getTableEntities(context, tableService, continuationToken, loadedResults, tableName, partitionName) {
