@@ -1,6 +1,16 @@
 const azure = require('azure-storage');
 const https = require('https');
 
+function objectifyEntity(tle) {
+    let result = {};
+    if (tle) {
+	Object.keys(tle).forEach(k => {
+	    result[k] = tle[k]._;
+	});
+    }
+    return result;
+}
+
 function getTimesheetLines(context, tableService, continuationToken, loadedResults) {
     if (!loadedResults) {
 	loadedResults = [];
@@ -12,7 +22,7 @@ function getTimesheetLines(context, tableService, continuationToken, loadedResul
 	    if (error) {
 		reject(error);
 	    } else {
-		const lines = loadedResults.concat(result.entries);
+		const lines = loadedResults.concat(result.entries.map(objectifyEntity));
 		if (result.continuationToken) {
 		    getTimesheetLines(context, tableService, result.continuationToken, lines).then(allLines => {
 			resolve(allLines);
@@ -51,6 +61,8 @@ async function calculateSummary(context) {
     const estimation = await getEstimation(context);
     const timesheetLines = await getTimesheetLines(context, tableService, null, []);
     context.log('Got ' + timesheetLines.length + ' timesheet lines');
+    context.log('the first is ');
+    context.log(JSON.stringify(timesheetLines[0]));
     return estimation;
 }
 
