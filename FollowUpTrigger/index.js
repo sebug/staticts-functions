@@ -232,6 +232,8 @@ async function calculateSummary(context) {
 		isFirst = false;
 		context.log('Corresponding bucket string is ' + correspondingBucketString);
 	    }
+	} else {
+	    context.log('No follow-up line found for ' + JSON.stringify(tl));
 	}
     }
 
