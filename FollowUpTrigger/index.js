@@ -85,6 +85,20 @@ function groupTimesheetLinesByJobAndTask(timesheetLines) {
     return result;
 }
 
+function* getDateBuckets(startDate) {
+    while (startDate <= new Date().valueOf()) {
+	let toDate = new Date(startDate.valueOf());
+	toDate.setDate(toDate.getDate() + 6);
+	const dateBucket = {
+	    From: startDate,
+	    To: toDate
+	};
+	yield dateBucket;
+
+	startDate.setDate(startDate.getDate() + 7);
+    }
+}
+
 async function calculateSummary(context) {
     const tableService = azure.createTableService();
     
@@ -173,6 +187,11 @@ async function calculateSummary(context) {
 	    result.FollowUpLines.push(followUpLine);
 	}
     }
+
+    const dateBuckets = Array.from(getDateBuckets(startingDate));
+
+    context.log('We got ' + dateBuckets.length + ' date buckets');
+    context.log('First is ' + JSON.stringify(dateBuckets[0]));
 
     return result;
 }
