@@ -66,6 +66,7 @@ function getEstimation(context) {
 function groupTimesheetLinesByJobAndTask(timesheetLines) {
     timesheetLines = timesheetLines || [];
     let groups = {};
+    let result = [];
     for (let tl of timesheetLines) {
 	const jobNumber = tl.JobNumber.replace('JOB','')
 	      .replace(/^0+/,'');
@@ -73,10 +74,15 @@ function groupTimesheetLinesByJobAndTask(timesheetLines) {
 	const key = jobNumber + '_' + taskNumber;
 	if (!groups[key]) {
 	    groups[key] = [];
+	    result.push({
+		JobNumber: jobNumber,
+		TaskNumber: taskNumber,
+		Lines: groups[key]
+	    });
 	}
 	groups[key].push(tl);
     }
-    return groups;
+    return result;
 }
 
 async function calculateSummary(context) {
@@ -150,9 +156,12 @@ async function calculateSummary(context) {
 	return startDateMatches; // TODO: allow for yearly summaries by also defining end date
     });
 
-    let groups = groupTimesheetLinesByJobAndTask(rangeTimesheetLines);
+    let timesheetLinesGroupedByJobAndTask = groupTimesheetLinesByJobAndTask(rangeTimesheetLines);
 
-    context.log('We have ' + Object.keys(groups).length + ' groups');
+    context.log('We have ' + timesheetLinesGroupedByJobAndTask.length + ' groups');
+
+    context.log('First is ' + timesheetLinesGroupedByJobAndTask[0].JobNumber +
+		' - ' + timesheetLinesGroupedByJobAndTask[0].TaskNumber);
 
     return result;
 }
