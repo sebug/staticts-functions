@@ -118,7 +118,14 @@ async function calculateSummary(context) {
     if (estimation.StartDate) {
 	startingDate = new Date(estimation.StartDate);
     }
+    const bucketStartDay = 1; // Monday
+    while (startingDate.getDay() !== bucketStartDay) {
+	let d = new Date(startingDate.valueOf());
+	d.setDate(d.getDate() - 1);
+	startingDate = d;
+    }
     context.log('Starting date is ' + startingDate);
+
     return result;
 }
 
