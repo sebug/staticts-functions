@@ -158,6 +158,9 @@ async function calculateSummary(context) {
 
     let timesheetLinesGroupedByJobAndTask = groupTimesheetLinesByJobAndTask(rangeTimesheetLines);
 
+    // temporary - removing some lines to test the no estimate path
+    result.FollowUpLines = result.FollowUpLines.slice(0, result.FollowUpLines.length - 10);
+
     for (let tg of timesheetLinesGroupedByJobAndTask) {
 	if (!result.FollowUpLines.filter(fu => {
 	    return fu.NavJobNumber === tg.JobNumber && fu.NavTaskNumber === tg.TaskNumber;
