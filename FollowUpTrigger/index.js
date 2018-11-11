@@ -68,10 +68,7 @@ async function calculateSummary(context) {
     
     const estimation = await getEstimation(context);
     const timesheetLines = await getTimesheetLines(context, tableService, null, []);
-    const tasks = await getTaskLines(context, tableService, null, [], '592');
     context.log('Got ' + timesheetLines.length + ' timesheet lines');
-    context.log('the first task is ');
-    context.log(JSON.stringify(tasks[0]));
     let result = {};
     result.Name = estimation.Name;
     result.TimePeriodTitle = estimation.TimePeriodTitle;
@@ -115,6 +112,13 @@ async function calculateSummary(context) {
 	    result.FollowUpLines.push(followUpLine);
 	}
     }
+
+    // Prepare week buckets
+    let startingDate = new Date(new Date().getFullYear(), 0, 1);
+    if (estimation.StartDate) {
+	startingDate = new Date(estimation.StartDate);
+    }
+    context.log('Starting date is ' + startingDate);
     return result;
 }
 
