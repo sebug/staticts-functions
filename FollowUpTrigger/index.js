@@ -1,6 +1,30 @@
 const azure = require('azure-storage');
 const https = require('https');
 
+function getTimesheetLines(context, tableService, continuationToken, loadedResults) {
+    if (!loadedResults) {
+	loadedResults = [];
+    }
+    return new Promise((resolve, reject) => {
+	const query = new azure.TableQuery()
+	      .where('PartitionKey eq ?', 'prod');
+	tableService.queryEntities('timesheetLines', query, continuationToken, (error, result, response) => {
+	    if (error) {
+		reject(error);
+	    } else {
+		const lines = loadedResults.concat(result.entries);
+		if (result.continuationToken) {
+		    getTimesheetLines(context, tableService, result.continuationToken, lines).then(allLines => {
+			resolve(allLines);
+		    });
+		} else {
+		    resolve(lines);
+		}
+	    }
+	});
+    });
+}
+
 function getEstimation(context) {
     return new Promise((resolve, reject) => {
 	https.get(process.env.GIST_URL, (resp) => {
@@ -22,7 +46,11 @@ function getEstimation(context) {
 }
 
 async function calculateSummary(context) {
+    const tableService = azure.createTableService();
+    
     const estimation = await getEstimation(context);
+    const timesheetLines = await getTimesheetLines(context, tableService, null, []);
+    context.log('Got ' + timesheetLines.length + ' timesheet lines');
     return estimation;
 }
 
