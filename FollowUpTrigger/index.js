@@ -126,11 +126,11 @@ function formatBucketString(db) {
 	endDate + '.' + endMonth;
 }
 
-function findOtherTimesheetLineOfJob(timesheetLines, jobNumber) {
+function findOtherTimesheetLineOfJob(timesheetLines, searchedJobNumber) {
     return timesheetLines.filter(tl => {
 			const jobNumber = tl.JobNumber.replace('JOB','')
 			      .replace(/^0+/,'');
-			if (jobNumber === estimationLine.NavJobNumber) {
+			if (jobNumber === searchedJobNumber) {
 			    return tl.JobName;
 			}
 			return false;
