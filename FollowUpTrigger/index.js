@@ -184,7 +184,7 @@ async function calculateSummary(context) {
 		    }
 
 		    // also, try to find out the project name if at all possible
-		    const otherTimesheetLineOfSameJob = findOtherTimesheetLineOfJob(timesheetLines, jobNumber);
+		    const otherTimesheetLineOfSameJob = findOtherTimesheetLineOfJob(timesheetLines, followUpLine.NavJobNumber);
 		    if (otherTimesheetLineOfSameJob) {
 			followUpLine.Project = otherTimesheetLineOfSameJob.JobName;
 		    }
