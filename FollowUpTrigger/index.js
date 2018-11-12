@@ -223,7 +223,8 @@ async function calculateSummary(context) {
 		NavJobNumber: tg.JobNumber,
 		NavTaskNumber: tg.TaskNumber,
 		Project: tg.Lines[0].JobDescription,
-		Task: tg.Lines[0].TaskDescription
+		Task: tg.Lines[0].TaskDescription,
+		TfsNumber: ''
 	    };
 	    context.log('Added ' + JSON.stringify(followUpLine));
 	    result.FollowUpLines.push(followUpLine);
