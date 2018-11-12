@@ -221,7 +221,7 @@ async function calculateSummary(context) {
 	    const followUpLine= {
 		State: 'Open',
 		NavJobNumber: tg.JobNumber,
-		NavTasknumber: tg.TaskNumber,
+		NavTaskNumber: tg.TaskNumber,
 		Project: tg.Lines[0].JobDescription,
 		Task: tg.Lines[0].TaskDescription
 	    };
