@@ -126,6 +126,17 @@ function formatBucketString(db) {
 	endDate + '.' + endMonth;
 }
 
+function findOtherTimesheetLineOfJob(timesheetLines, jobNumber) {
+    return timesheetLines.filter(tl => {
+			const jobNumber = tl.JobNumber.replace('JOB','')
+			      .replace(/^0+/,'');
+			if (jobNumber === estimationLine.NavJobNumber) {
+			    return tl.JobName;
+			}
+			return false;
+		    })[0];
+}
+
 async function calculateSummary(context) {
     const tableService = azure.createTableService();
     
@@ -173,14 +184,7 @@ async function calculateSummary(context) {
 		    }
 
 		    // also, try to find out the project name if at all possible
-		    const otherTimesheetLineOfSameJob = timesheetLines.filter(tl => {
-			const jobNumber = tl.JobNumber.replace('JOB','')
-			      .replace(/^0+/,'');
-			if (jobNumber === estimationLine.NavJobNumber) {
-			    return tl.JobName;
-			}
-			return false;
-		    })[0];
+		    const otherTimesheetLineOfSameJob = findOtherTimesheetLineOfJob(timesheetLines, jobNumber);
 		    if (otherTimesheetLineOfSameJob) {
 			followUpLine.Project = otherTimesheetLineOfSameJob.JobName;
 		    }
@@ -227,6 +231,10 @@ async function calculateSummary(context) {
 		TfsNumber: '',
 		BaseLine: null
 	    };
+	    const otherTimesheetLineOfSameJob = findOtherTimesheetLineOfJob(timesheetLines, tg.JobNumber);
+	    if (otherTimesheetLineOfSameJob) {
+		followUpLine.Project = otherTimesheetLineOfSameJob.JobName;
+	    }
 	    context.log('Added ' + JSON.stringify(followUpLine));
 	    result.FollowUpLines.push(followUpLine);
 	}
