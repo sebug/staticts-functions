@@ -22,12 +22,14 @@ async function renderFollowUpPage(context) {
     let followUpPageContent = await fetchFollowUpPage();
 
     // Add the fetch polyfill in the header
-    const fetchAdditions = '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.0.0/fetch.min.js"></script>';
+    const fetchAdditions = '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>';
     const firstScriptIndex = followUpPageContent.indexOf('<script');
 
     followUpPageContent = followUpPageContent.substring(0, firstScriptIndex) +
 	fetchAdditions +
 	followUpPageContent.substring(firstScriptIndex, followUpPageContent.length);
+    context.log(followUpPageContent);
+    
     const virtualConsole = new jsdom.VirtualConsole();
 
     virtualConsole.on('error', function (err, more) {
