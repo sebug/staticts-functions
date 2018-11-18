@@ -21,10 +21,20 @@ function fetchFollowUpPage() {
 async function renderFollowUpPage(context) {
     const followUpPageContent = await fetchFollowUpPage();
 
+    const virtualConsole = new jsdom.VirtualConsole();
+
+    virtualConsole.on('error', err => {
+	context.log('Error ' + err);
+    });
+    virtualConsole.on('log', msg => {
+	context.log(msg);
+    });
+
     const dom = new JSDOM(followUpPageContent, {
 	url: process.env.FOLLOW_UP_URL,
 	runScripts: 'dangerously',
-	resources: 'usable'
+	resources: 'usable',
+	virtualConsole: virtualConsole
     });
 
     const trs = dom.window.document.querySelectorAll('tr');
