@@ -1,5 +1,4 @@
 const https = require('https');
-const fetch = require("node-fetch");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
@@ -20,8 +19,14 @@ function fetchFollowUpPage() {
 }
 
 async function renderFollowUpPage(context) {
-    const followUpPageContent = await fetchFollowUpPage();
+    let followUpPageContent = await fetchFollowUpPage();
 
+    // Add the fetch polyfill in the header
+    const fetchAdditions = '<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>' +
+	  '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>';
+    const firstScriptIndex = followUpPageContent.indexOf('<script');
+    context.log('First script index is ' + firstScriptIndex);
+    
     const virtualConsole = new jsdom.VirtualConsole();
 
     virtualConsole.on('error', function (err, more) {
