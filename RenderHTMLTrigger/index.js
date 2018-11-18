@@ -1,7 +1,25 @@
 const https = require('https');
 const ko = require('knockout');
 
+function fetchFollowUpPage() {
+    return new Promise((resolve, reject) => {
+        https.get(process.env.FOLLOW_UP_URL, (resp) => {
+            let data = '';
+
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+            
+            resp.on('end', () => {
+                resolve(data);
+            });
+        });
+    });
+}
+
 module.exports = async function (context, req) {
+    const followUpPageContent = await fetchFollowUpPage();
+    context.log('Beginning is ' + followUpPageContent.substring(0, 100));
     context.log('rendering follow-up page ' + process.env.FOLLOW_UP_URL);
     context.log(typeof ko);
     return {
