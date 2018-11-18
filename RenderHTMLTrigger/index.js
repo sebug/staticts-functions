@@ -34,6 +34,7 @@ async function renderFollowUpPage(context) {
 	url: process.env.FOLLOW_UP_URL,
 	runScripts: 'dangerously',
 	resources: 'usable',
+	pretendToBeVisual: true,
 	virtualConsole: virtualConsole
     });
 
