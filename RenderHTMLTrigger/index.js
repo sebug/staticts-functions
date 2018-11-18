@@ -22,15 +22,12 @@ async function renderFollowUpPage(context) {
     let followUpPageContent = await fetchFollowUpPage();
 
     // Add the fetch polyfill in the header
-    const fetchAdditions = // Don't think I need bluebird '<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>' +
-	  '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>';
+    const fetchAdditions = '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.0.0/fetch.min.js"></script>';
     const firstScriptIndex = followUpPageContent.indexOf('<script');
 
     followUpPageContent = followUpPageContent.substring(0, firstScriptIndex) +
 	fetchAdditions +
 	followUpPageContent.substring(firstScriptIndex, followUpPageContent.length);
-    context.log(followUpPageContent);
-    
     const virtualConsole = new jsdom.VirtualConsole();
 
     virtualConsole.on('error', function (err, more) {
@@ -52,7 +49,7 @@ async function renderFollowUpPage(context) {
     });
 
     const waitBetweenPolls = 10 * 1000; // 10 s
-    const numberOfTries = 10;
+    const numberOfTries = 20;
 
     const trsPromise = new Promise((resolve, reject) => {
 	function waitForTrs(iterationsLeft) {
