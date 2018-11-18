@@ -37,9 +37,31 @@ async function renderFollowUpPage(context) {
 	virtualConsole: virtualConsole
     });
 
-    const trs = dom.window.document.querySelectorAll('tr');
+    const waitBetweenPolls = 10 * 1000; // 10 s
+    const numberOfTries = 10;
 
-    context.log('Dangerous script execution, got ' + trs.length + ' trs');
+    const trsPromise = new Promise((resolve, reject) => {
+	function waitForTrs(iterationsLeft) {
+	    if (iterationsLeft <= 0) {
+		reject('No trs found after all');
+	    } else {
+		const trs = dom.window.document.querySelectorAll('tr');
+		if (trs.length === 0) {
+		    // wait a bit longer
+		    context.log('Nothing found at ' + iterationsLeft);
+		    setTimeout(() => waitForTrs(iterationsLeft - 1), waitBetweenPolls);
+		} else {
+		    resolve(trs.length);
+		}
+	    }
+	}
+
+	waitForTrs(numberOfTries);
+    });
+
+    const numberOfTrs = await trsPromise;
+
+    context.log('Dangerous script execution, got ' + numberOfTrs + ' trs');
 
     return followUpPageContent;
 }
