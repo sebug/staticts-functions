@@ -24,7 +24,7 @@ async function renderFollowUpPage(context) {
     const virtualConsole = new jsdom.VirtualConsole();
 
     virtualConsole.on('error', err => {
-	context.log('Error ' + err);
+	context.log('Error ' + JSON.stringify(err));
     });
     virtualConsole.on('log', msg => {
 	context.log(msg);
