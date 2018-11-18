@@ -23,7 +23,8 @@ async function renderFollowUpPage(context) {
 
     const dom = new JSDOM(followUpPageContent, {
 	url: process.env.FOLLOW_UP_URL,
-	runScripts: 'dangerously'
+	runScripts: 'dangerously',
+	resources: 'usable'
     });
 
     const trs = dom.window.document.querySelectorAll('tr');
