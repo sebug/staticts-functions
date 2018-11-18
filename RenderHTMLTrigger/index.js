@@ -76,6 +76,20 @@ async function renderFollowUpPage(context) {
 
     context.log('Dangerous script execution, got ' + numberOfTrs + ' trs');
 
+    // Now let's remove the script elements and return the doc
+    const scriptElements = dom.window.document.querySelectorAll('script');
+
+    context.log('got ' + scriptElements.length + ' script elements, removing them');
+
+    for (let i = 0; i < scriptElements.length; i += 1) {
+	let scriptElement = scriptElements[i];
+	scriptElement.parentNode.removeChild(scriptElement);
+    }
+
+    const newPageContent = dom.serialize();
+
+    context.log(newPageContent);
+
     return followUpPageContent;
 }
 
