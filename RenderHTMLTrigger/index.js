@@ -28,8 +28,7 @@ async function renderFollowUpPage(context) {
     followUpPageContent = followUpPageContent.substring(0, firstScriptIndex) +
 	fetchAdditions +
 	followUpPageContent.substring(firstScriptIndex, followUpPageContent.length);
-    context.log(followUpPageContent);
-    
+
     const virtualConsole = new jsdom.VirtualConsole();
 
     virtualConsole.on('error', function (err, more) {
@@ -88,9 +87,10 @@ async function renderFollowUpPage(context) {
 
     const newPageContent = dom.serialize();
 
-    context.log(newPageContent);
+    const withoutCustomTags = newPageContent.replace('<follow-up>','')
+	  .replace('</follow-up>', '');
 
-    return followUpPageContent;
+    return withoutCustomTags;
 }
 
 module.exports = async function (context, req) {
