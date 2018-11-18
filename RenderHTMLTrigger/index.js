@@ -1,5 +1,6 @@
 const https = require('https');
-const ko = require('knockout');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 
 function fetchFollowUpPage() {
     return new Promise((resolve, reject) => {
@@ -17,11 +18,23 @@ function fetchFollowUpPage() {
     });
 }
 
-module.exports = async function (context, req) {
+async function renderFollowUpPage(context) {
     const followUpPageContent = await fetchFollowUpPage();
-    context.log('Beginning is ' + followUpPageContent.substring(0, 100));
-    context.log('rendering follow-up page ' + process.env.FOLLOW_UP_URL);
-    context.log(typeof ko);
+
+    const dom = new JSDOM(followUpPageContent, {
+	url: process.env.FOLLOW_UP_URL,
+	runScripts: 'dangerously'
+    });
+
+    const trs = dom.window.document.querySelectorAll('tr');
+
+    context.log('Dangerous script execution, got ' + trs.length + ' trs');
+
+    return followUpPageContent;
+}
+
+module.exports = async function (context, req) {
+    const followUpPageContent = await renderFollowUpPage(context);
     return {
 	body: '<!DOCTYPE html>' +
 	    '<html>' +

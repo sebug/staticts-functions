@@ -1,5 +1,5 @@
 {
     "dependencies": {
-	"knockout": "^3.4.2"
+	"jsdom": "^13.0.0"
     }
 }
