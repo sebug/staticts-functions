@@ -22,7 +22,7 @@ async function renderFollowUpPage(context) {
     let followUpPageContent = await fetchFollowUpPage();
 
     // Add the fetch polyfill in the header
-    const fetchAdditions = '<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>' +
+    const fetchAdditions = // Don't think I need bluebird '<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>' +
 	  '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>';
     const firstScriptIndex = followUpPageContent.indexOf('<script');
     context.log('First script index is ' + firstScriptIndex);
