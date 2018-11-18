@@ -96,16 +96,7 @@ async function renderFollowUpPage(context) {
 module.exports = async function (context, req) {
     const followUpPageContent = await renderFollowUpPage(context);
     return {
-	body: '<!DOCTYPE html>' +
-	    '<html>' +
-	    '<head>' +
-	    '<title>Pre-rendered follow-up</title>' +
-	    '<meta charset="utf-8">' +
-	    '</head>' +
-	    '<body>' +
-	    '<h1>Pre-rendered follow-up</h1>' +
-	    '</body>' +
-	    '</html>',
+	body: followUpPageContent,
 	status: 200,
 	headers: {
 	    'Content-Type': 'text/html'
