@@ -1,7 +1,7 @@
 const https = require('https');
 
 module.exports = async function (context, req) {
-    context.log('rendering follow-up page');
+    context.log('rendering follow-up page ' + process.env.FOLLOW_UP_URL);
     return {
 	body: '<!DOCTYPE html>' +
 	    '<html>' +
