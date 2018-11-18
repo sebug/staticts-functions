@@ -1,4 +1,5 @@
 const https = require('https');
+const fetch = require("node-fetch");
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
