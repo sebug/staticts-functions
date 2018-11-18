@@ -1,7 +1,9 @@
 const https = require('https');
+const ko = require('knockout');
 
 module.exports = async function (context, req) {
     context.log('rendering follow-up page ' + process.env.FOLLOW_UP_URL);
+    context.log(typeof ko);
     return {
 	body: '<!DOCTYPE html>' +
 	    '<html>' +
