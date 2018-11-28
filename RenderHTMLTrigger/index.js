@@ -94,6 +94,7 @@ async function renderFollowUpPage(context) {
 }
 
 module.exports = async function (context, req) {
+    context.log('start getting follow up page');
     const followUpPageContent = await renderFollowUpPage(context);
     return {
 	body: followUpPageContent,
